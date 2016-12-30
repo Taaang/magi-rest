@@ -1,4 +1,4 @@
-package priv.taaang.taaang.response;
+package priv.taaang.magi.response;
 
 import javax.servlet.http.HttpServletResponse;
 

@@ -1,4 +1,4 @@
-package priv.taaang.taaang.response;
+package priv.taaang.magi.response;
 
 /**
  * Created by TdaQ on 16/12/12.
