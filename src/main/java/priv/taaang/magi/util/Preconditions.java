@@ -17,20 +17,17 @@ public class Preconditions {
             mExpression = expression;
         }
 
-        public void throwException(Class<? extends Exception> exceptionClazz, String errorMessage) throws Exception {
+        public <T extends Exception> void throwException(Class<T> exceptionClazz, String errorMessage) throws T {
             if (mExpression) {
                 try {
                     mException = exceptionClazz.getDeclaredConstructor(String.class).newInstance(errorMessage);
                 } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
                     mException = new MagiRestDefaultException(errorMessage);
                 }
-                throw mException;
+                throw (T) mException;
             }
         }
 
-        public void throwException(Class<? extends Exception> exceptionClazz) throws Exception {
-            throwException(exceptionClazz, String);
-        }
     }
 
     public static Builder when(boolean expression) {

@@ -3,10 +3,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>delroy</groupId>
-    <artifactId>taaang-rest</artifactId>
-    <version>0.2.0</version>
+    <artifactId>magi-rest</artifactId>
+    <version>0.3.0</version>
     <packaging>jar</packaging>
-    <name>taaang</name>
+    <name>magi-rest</name>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -14,11 +14,28 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <repositories>
+        <repository>
+            <id> central</id>
+            <name> Maven Repository Switchboard</name>
+            <layout> default</layout>
+            <url>http://repo1.maven.org/maven2</url>
+            <snapshots>
+                <enabled> false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>3.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.8.1</version>
         </dependency>
     </dependencies>
 
