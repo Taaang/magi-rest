@@ -5,5 +5,5 @@ package priv.taaang.magi.response;
  */
 public interface Response {
 
-
+    public void respond(Object body);
 }

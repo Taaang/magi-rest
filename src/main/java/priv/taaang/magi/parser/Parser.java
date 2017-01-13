@@ -10,4 +10,6 @@ import java.util.Map;
 public interface Parser {
 
     public Map<String, Object> parse(InputStream inputStream) throws IOException;
+
+    public String generate(Object object) throws IOException;
 }

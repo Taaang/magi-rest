@@ -69,8 +69,8 @@ public class Entry {
         return parameters;
     }
 
-    public void invoke(Object caller, Request request, Response response) throws InvocationTargetException, IllegalAccessException{
-        mMethod.invoke(caller, request, response);
+    public Object invoke(Object caller, Request request, Response response) throws InvocationTargetException, IllegalAccessException{
+        return mMethod.invoke(caller, request, response);
     }
 
     public static class EntryBuilder {

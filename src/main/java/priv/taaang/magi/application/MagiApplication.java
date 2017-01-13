@@ -2,18 +2,17 @@ package priv.taaang.magi.application;
 
 import priv.taaang.magi.exception.MagiRestDefaultException;
 import priv.taaang.magi.exception.RequestMappingNotFoundException;
+import priv.taaang.magi.handler.ExceptionHandler;
 import priv.taaang.magi.parser.BodyParser;
 import priv.taaang.magi.request.Request;
 import priv.taaang.magi.request.ServletRequest;
 import priv.taaang.magi.response.Response;
 import priv.taaang.magi.response.ServletResponse;
-import priv.taaang.magi.route.Entry;
 import priv.taaang.magi.route.Router;
 import priv.taaang.magi.util.Preconditions;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -24,6 +23,14 @@ import java.util.Optional;
 public class MagiApplication {
 
     private Map<String, Router> mRouteMapping = new HashMap<>();
+    private Map<Class<? extends Exception>, ExceptionHandler> mExceptionMapping = new HashMap<>();
+
+    public MagiApplication() {
+    }
+
+    public void registerException(Class<? extends Exception> exceptionClazz, ExceptionHandler exceptionHandler) {
+        mExceptionMapping.put(exceptionClazz, exceptionHandler);
+    }
 
     public void registerRouter(String baseRoute, Class clazz) {
         try {
@@ -36,14 +43,22 @@ public class MagiApplication {
     public void handle(HttpServletRequest servletRequest, HttpServletResponse servletResponse) throws RequestMappingNotFoundException{
         Request request = new ServletRequest(servletRequest);
         Response response = new ServletResponse(servletResponse);
-
-        Optional<Router> matchedRouter = match(request.getRequestRoute());
-        Preconditions.when(!matchedRouter.isPresent()).throwException(RequestMappingNotFoundException.class, request.getRequestRoute());
+        Object result = new Object();
 
         try {
-            matchedRouter.get().invoke(request, response);
-        } catch (InvocationTargetException | IllegalAccessException e) {
-            throw new MagiRestDefaultException(e);
+            Optional<Router> matchedRouter = match(request.getRequestRoute());
+            Preconditions.when(!matchedRouter.isPresent()).throwException(RequestMappingNotFoundException.class, request.getRequestRoute());
+
+            Map<String, Object> bodyParameters = BodyParser.parse(request);
+            request.appendParameters(bodyParameters);
+            Map<String, Object> pathParameters = request.getRawRequestPathParameters();
+            request.appendParameters(pathParameters);
+
+            result = matchedRouter.get().invoke(request, response);
+        } catch (Exception e) {
+            result = mExceptionMapping.get(e.getClass()).handle(request, response, e);
+        } finally {
+            response.respond(result);
         }
     }
 

@@ -1,5 +1,6 @@
 package priv.taaang.magi.route;
 
+import priv.taaang.magi.exception.MethodInvokeException;
 import priv.taaang.magi.exception.RequestMappingNotFoundException;
 import priv.taaang.magi.request.Request;
 import priv.taaang.magi.response.Response;
@@ -45,11 +46,15 @@ public class Router {
         return entryMapping.isPresent() ? Optional.of(mEntryMapping.get(entryMapping.get())) : Optional.empty();
     }
 
-    public void invoke(Request request, Response response) throws IllegalAccessException, InvocationTargetException{
-        Optional<Entry> matchedEntry = matchEntry(request.getRequestRoute());
-        Preconditions.when(!matchedEntry.isPresent()).throwException(RequestMappingNotFoundException.class, request.getRequestRoute());
+    public Object invoke(Request request, Response response) throws MethodInvokeException {
+        try {
+            Optional<Entry> matchedEntry = matchEntry(request.getRequestRoute());
+            Preconditions.when(!matchedEntry.isPresent()).throwException(RequestMappingNotFoundException.class, request.getRequestRoute());
 
-        request.appendParameters(matchedEntry.get().parseRouteParam(request.getRequestRoute()));
-        matchedEntry.get().invoke(mRouterInstance, request, response);
+            request.appendParameters(matchedEntry.get().parseRouteParam(request.getRequestRoute()));
+            return matchedEntry.get().invoke(mRouterInstance, request, response);
+        } catch (InvocationTargetException | IllegalAccessException e) {
+            throw new MethodInvokeException(e);
+        }
     }
 }

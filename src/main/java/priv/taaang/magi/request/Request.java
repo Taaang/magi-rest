@@ -18,6 +18,8 @@ public interface Request {
 
     HttpServletRequest getRawRequest();
 
+    Map<String, Object> getRawRequestPathParameters();
+
     void setParameters(Map<String, Object> parameters);
 
     void appendParameters(Map<String, Object> toAppend);

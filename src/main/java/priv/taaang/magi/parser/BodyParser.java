@@ -23,7 +23,7 @@ public class BodyParser {
         mParserMapping.put(BodyParserType.APPLICATION_JSON.value(), new JSONParser());
     }
 
-    private enum BodyParserType {
+    public enum BodyParserType {
         APPLICATION_JSON("application/json");
 
         private String mContentType;
@@ -44,5 +44,9 @@ public class BodyParser {
         } catch (IOException | BodyParserNotFoundException e) {
             throw new BodyParseException(e);
         }
+    }
+
+    public static String generate(BodyParserType bodyParserType, Object object) throws IOException {
+        return mParserMapping.get(bodyParserType.value()).generate(object);
     }
 }

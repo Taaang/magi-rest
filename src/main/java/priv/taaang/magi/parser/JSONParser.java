@@ -2,11 +2,8 @@ package priv.taaang.magi.parser;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Map;
 
 /**
@@ -14,19 +11,19 @@ import java.util.Map;
  */
 class JSONParser implements Parser{
 
-    @Override
-    public Map<String, Object> parse(InputStream inputStream) throws IOException{
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(inputStream, new TypeReference<Map<String, Object>>(){});
+    private ObjectMapper mObjectMapper = new ObjectMapper();
+
+    public JSONParser() {
+        mObjectMapper = new ObjectMapper();
     }
 
-    private String readFromInputStream(InputStream inputStream) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        String content;
-        StringBuilder result = new StringBuilder();
-        while ((content = bufferedReader.readLine()) != null) {
-            result.append(content);
-        }
-        return result.toString();
+    @Override
+    public Map<String, Object> parse(InputStream inputStream) throws IOException{
+        return mObjectMapper.readValue(inputStream, new TypeReference<Map<String, Object>>(){});
+    }
+
+    @Override
+    public String generate(Object object) throws IOException {
+        return mObjectMapper.writeValueAsString(object);
     }
 }

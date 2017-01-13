@@ -3,6 +3,9 @@ package priv.taaang.magi.request;
 import priv.taaang.magi.route.Entry;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,6 +44,18 @@ public class ServletRequest implements Request {
     @Override
     public String getContentType() {
         return mRawRequest.getContentType();
+    }
+
+    @Override
+    public Map<String, Object> getRawRequestPathParameters() {
+        Map<String, String[]> pathParameters = mRawRequest.getParameterMap();
+        Map<String, Object> result = new HashMap<>();
+        for (String each : pathParameters.keySet()) {
+            String[] value = pathParameters.get(each);
+            Object data = (value.length == 1) ? value[0] : new ArrayList<>(Arrays.asList(value));
+            result.put(each, data);
+        }
+        return result;
     }
 
     @Override
