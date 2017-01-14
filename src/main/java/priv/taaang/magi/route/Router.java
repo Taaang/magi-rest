@@ -25,6 +25,10 @@ public class Router {
 
     private Router() { }
 
+    public Class getRouterClass() {
+        return mRouterClazz;
+    }
+
     public static Router buildFromClass(String baseRoute, Class clazz) throws IllegalAccessException, InstantiationException {
         Router router = new Router();
         Method[] methods = clazz.getDeclaredMethods();
@@ -46,7 +50,7 @@ public class Router {
         return entryMapping.isPresent() ? Optional.of(mEntryMapping.get(entryMapping.get())) : Optional.empty();
     }
 
-    public Object invoke(Request request, Response response) throws MethodInvokeException {
+    public Object invoke(Request request, Response response) throws MethodInvokeException, RequestMappingNotFoundException {
         try {
             Optional<Entry> matchedEntry = matchEntry(request.getRequestRoute());
             Preconditions.when(!matchedEntry.isPresent()).throwException(RequestMappingNotFoundException.class, request.getRequestRoute());

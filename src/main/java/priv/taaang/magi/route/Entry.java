@@ -40,7 +40,7 @@ public class Entry {
     private void buildFromMethod(Method method) {
         RequestMapping requestMapping = method.getAnnotation(RequestMapping.class);
         if (requestMapping == null) {
-            throw new RequestMappingNotFoundException();
+            return;
         }
 
         Matcher matcher = mReplacePathParamPattern.matcher(requestMapping.route());

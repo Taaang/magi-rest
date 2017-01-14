@@ -5,7 +5,13 @@ package priv.taaang.magi.route.label;
  */
 public enum RequestMethod {
     GET("GET"),
-    POST("POST");
+    POST("POST"),
+    PUT("PUT"),
+    PATCH("PATCH"),
+    DELETE("DELETE"),
+    HEAD("HEAD"),
+    OPTIONS("OPTIONS"),
+    TRACE("TRACE");
 
     private String mValue;
 

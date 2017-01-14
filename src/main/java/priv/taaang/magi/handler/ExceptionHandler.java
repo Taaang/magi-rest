@@ -8,6 +8,6 @@ import priv.taaang.magi.response.Response;
  */
 public interface ExceptionHandler {
 
-    public Object handle(Request request, Response response, Exception exception);
+    public Object handle(Exception e, Request request, Response response);
 
 }

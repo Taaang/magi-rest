@@ -22,7 +22,7 @@ public class Preconditions {
                 try {
                     mException = exceptionClazz.getDeclaredConstructor(String.class).newInstance(errorMessage);
                 } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
-                    mException = new MagiRestDefaultException(errorMessage);
+                    mException = new MagiRestDefaultException(e.getMessage());
                 }
                 throw (T) mException;
             }

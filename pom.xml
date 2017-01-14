@@ -4,7 +4,7 @@
 
     <groupId>delroy</groupId>
     <artifactId>magi-rest</artifactId>
-    <version>0.3.0</version>
+    <version>0.6.2</version>
     <packaging>jar</packaging>
     <name>magi-rest</name>
 
